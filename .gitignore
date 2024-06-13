@@ -20,3 +20,20 @@
 # Go workspace file
 go.work
 go.work.sum
+/redis/tls/ca.crt
+/redis/tls/ca.key
+/redis/tls/ca.txt
+/redis/tls/client.crt
+/redis/tls/client.key
+/redis/tls/openssl.cnf
+/redis/tls/redis.crt
+/redis/tls/redis.dh
+/redis/tls/redis.key
+/redis/tls/server.crt
+/redis/tls/server.key
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/.gitignore
+/.idea/auth.iml
+/.idea/material_theme_project_new.xml
+/.idea/modules.xml
+/.idea/vcs.xml
