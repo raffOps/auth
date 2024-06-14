@@ -1,3 +1,3 @@
-ARG REDIS_VERSION=latest
+ARG REDIS_VERSION=7.2.5
 FROM redis:${REDIS_VERSION} AS base
 COPY ./tls /tls
