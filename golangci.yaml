@@ -1,0 +1,8 @@
+issues:
+  exclude-rules:
+    - path: vendor/.*
+      linters:
+        - "*"
+    - path: internal/mocks/.*
+      linters:
+        - "*"

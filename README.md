@@ -28,7 +28,7 @@ O sistema será desenvolvido em Go e seguirá os princípios SOLID e o padrão P
 
 1. Desempenho esperado: Altamente escalável conforme a quantidade de usuários.
 
-2. Requisitos de segurança: Sem senhas, somente OAuth. Conexão com certificado SSL/TSL.
+2. Requisitos de segurança: Sem senhas, somente OAuth. Conexão com certificado SSL/TLS.
 
 3. Disponibilidade e confiabilidade: Disponível 24/7, com um tempo de inatividade mínimo para manutenção. Meta de disponibilidade de 99,9%.
 
