@@ -5,44 +5,35 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"github.com/redis/go-redis/v9"
-	"io/ioutil"
 	"log"
-	"time"
+	"os"
 )
 
 var ctx = context.Background()
 
 func main() {
-	// Carregar o certificado da Autoridade Certificadora
-	caCert, err := ioutil.ReadFile("redis/tls/ca.crt")
+	cert, err := tls.LoadX509KeyPair("redis/tls/client.crt", "redis/tls/client.key")
 	if err != nil {
-		log.Fatalf("Failed to load CA cert: %v", err)
+		log.Fatal(err)
 	}
 
+	// Load CA cert
+	caCert, err := os.ReadFile("redis/tls/ca.crt")
+	if err != nil {
+		log.Fatal(err)
+	}
 	caCertPool := x509.NewCertPool()
-	if ok := caCertPool.AppendCertsFromPEM(caCert); !ok {
-		log.Fatalf("Failed to append CA cert to pool")
-	}
-
-	// Carregar o certificado do cliente e a chave privada
-	clientCert, err := tls.LoadX509KeyPair("redis/tls/client.crt", "redis/tls/client.key")
-	if err != nil {
-		log.Fatalf("Failed to load client cert/key: %v", err)
-	}
-
+	caCertPool.AppendCertsFromPEM(caCert)
 	// Configurar o tls.Config
 	tlsConfig := &tls.Config{
+		MinVersion:   tls.VersionTLS12,
 		RootCAs:      caCertPool,
-		Certificates: []tls.Certificate{clientCert},
+		Certificates: []tls.Certificate{cert},
 	}
 
 	rdb := redis.NewClient(&redis.Options{
-		Addr:         "127.0.0.1:6379",
-		TLSConfig:    tlsConfig,
-		DialTimeout:  50 * time.Second, // Tempo limite de conexão
-		ReadTimeout:  30 * time.Second, // Tempo limite de leitura
-		WriteTimeout: 30 * time.Second, // Tempo limite de escrita
-
+		Addr:      "localhost:6379",
+		TLSConfig: tlsConfig,
 	})
 
 	err = rdb.Ping(ctx).Err()
@@ -50,8 +41,21 @@ func main() {
 		log.Fatalf("%v", err)
 	}
 
-	err = rdb.Set(ctx, "teste", "teste", 0).Err()
-	if err != nil {
-		log.Fatalf("%v", err)
-	}
+	//err = rdb.Set(ctx, "teste", "teste", 0).Err()
+	//if err != nil {
+	//	log.Fatalf("%v", err)
+	//}
+
+	//hashMap := map[string]interface{}{
+	//	"field3": "value3",
+	//	"field4": "value4",
+	//}
+	//for k, v := range hashMap {
+	//	err = rdb.HSet(ctx, "sessionId:12233434", k, v).Err()
+	//	if err != nil {
+	//		log.Println(err)
+	//	}
+	//}
+
+	rdb.SAdd(ctx, "set1", "value1", "value2", "value3")
 }
